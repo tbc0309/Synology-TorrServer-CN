@@ -41,7 +41,7 @@ export default function AddDialog({
   const [isUserInteractedWithPoster, setIsUserInteractedWithPoster] = useState(isEditMode)
   const [currentLang] = useChangeLanguage()
   const [selectedFile, setSelectedFile] = useState()
-  const [posterSearchLanguage, setPosterSearchLanguage] = useState(currentLang === 'ru' ? 'ru' : 'en')
+  const [posterSearchLanguage, setPosterSearchLanguage] = useState(currentLang === 'cn' ? 'cn' : 'en')
   const [isSaving, setIsSaving] = useState(false)
   const [skipDebounce, setSkipDebounce] = useState(false)
   const [isCustomTitleEnabled, setIsCustomTitleEnabled] = useState(false)
