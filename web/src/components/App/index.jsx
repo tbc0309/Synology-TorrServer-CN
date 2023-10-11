@@ -105,15 +105,15 @@ export default function App() {
 
                     <HeaderToggle
                       onClick={() =>
-                        currentLang === 'en'
+                        currentLang === 'zh'
+                          ? changeLang('en')
+                          : currentLang === 'en'
                           ? changeLang('ru')
                           : currentLang === 'ru'
                           ? changeLang('ua')
                           : currentLang === 'ua'
-                          ? changeLang('zh')
-                          : currentLang === 'zh'
                           ? changeLang('bg')
-                          : changeLang('en')
+                          : changeLang('zh')
                       }
                     >
                       {currentLang.toUpperCase()}
