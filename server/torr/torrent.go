@@ -6,6 +6,8 @@ import (
 	"sync"
 	"time"
 
+	utils2 "server/utils"
+
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
 
@@ -18,9 +20,10 @@ import (
 )
 
 type Torrent struct {
-	Title  string
-	Poster string
-	Data   string
+	Title    string
+	Category string
+	Poster   string
+	Data     string
 	*torrent.TorrentSpec
 
 	Stat      state.TorrentStat
@@ -266,7 +269,7 @@ func (t *Torrent) drop() {
 }
 
 func (t *Torrent) Close() bool {
-	if t.cache != nil && t.cache.Readers() > 0 {
+	if t.cache != nil && t.cache.GetUseReaders() > 0 {
 		return false
 	}
 	t.Stat = state.TorrentClosed
@@ -288,6 +291,7 @@ func (t *Torrent) Status() *state.TorrentStatus {
 	st.Stat = t.Stat
 	st.StatString = t.Stat.String()
 	st.Title = t.Title
+	st.Category = t.Category
 	st.Poster = t.Poster
 	st.Data = t.Data
 	st.Timestamp = t.Timestamp
@@ -331,7 +335,7 @@ func (t *Torrent) Status() *state.TorrentStatus {
 
 			files := t.Files()
 			sort.Slice(files, func(i, j int) bool {
-				return files[i].Path() < files[j].Path()
+				return utils2.CompareStrings(files[i].Path(), files[j].Path())
 			})
 			for i, f := range files {
 				st.FileStats = append(st.FileStats, &state.TorrentFileStat{

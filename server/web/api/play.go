@@ -19,17 +19,16 @@ import (
 //
 //	@Tags			API
 //
-//	@Param			hash		query	string	true	"Torrent hash"
-//	@Param			id			query	string	true	"File index in torrent"
-//	@Param			not_auth	query	bool	false	"Not authenticated"
+//	@Param			hash		path	string	true	"Torrent hash"
+//	@Param			id			path	string	true	"File index in torrent"
 //
 //	@Produce		application/octet-stream
 //	@Success		200	"Torrent data"
-//	@Router			/play [get]
+//	@Router			/play/{hash}/{id} [get]
 func play(c *gin.Context) {
 	hash := c.Param("hash")
 	indexStr := c.Param("id")
-	notAuth := c.GetBool("not_auth")
+	notAuth := c.GetBool("auth_required") && c.GetString(gin.AuthUserKey) == ""
 
 	if hash == "" || indexStr == "" {
 		c.AbortWithError(http.StatusNotFound, errors.New("link should not be empty"))
@@ -55,7 +54,7 @@ func play(c *gin.Context) {
 	}
 
 	if tor.Stat == state.TorrentInDB {
-		tor, err = torr.AddTorrent(spec, tor.Title, tor.Poster, tor.Data)
+		tor, err = torr.AddTorrent(spec, tor.Title, tor.Poster, tor.Data, tor.Category)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
 			return

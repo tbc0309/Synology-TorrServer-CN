@@ -81,12 +81,12 @@ On FreeBSD (TrueNAS/FreeNAS) you can use this plugin: <https://github.com/filka9
 
 ### Server args
 
-- `--port PORT`, `-p PORT` - web server port, default 8090
+- `--port PORT`, `-p PORT` - web server port (default 8090)
 - `--ssl` - enables https for web server
-- `--sslport PORT` -  web server https port, default 8091. If not set, will be taken from db (if stored previously) or use default.
+- `--sslport PORT` -  web server https port (default 8091). If not set, will be taken from db (if stored previously) or the default will be used.
 - `--sslcert PATH` -  path to ssl cert file. If not set, will be taken from db (if stored previously) or default self-signed certificate/key will be generated.
 - `--sslkey PATH` - path to ssl key file. If not set, will be taken from db (if stored previously) or default self-signed certificate/key will be generated.
-- `--path PATH`, `-d PATH` - database dir path
+- `--path PATH`, `-d PATH` - database and config dir path
 - `--logpath LOGPATH`, `-l LOGPATH` - server log file path
 - `--weblogpath WEBLOGPATH`, `-w WEBLOGPATH` - web access log file path
 - `--rdb`, `-r` - start in read-only DB mode
@@ -167,6 +167,27 @@ https://github.com/vladlenas
 
 Synology NAS packages repo source: https://grigi.lt
 
+### Development
+
+#### Go server
+
+To run the Go server locally, just run
+
+```bash
+cd server
+go run ./cmd
+```
+
+#### Web development
+
+To run the web server locally, just run
+
+```bash
+yarn start
+```
+
+More info at https://github.com/YouROK/TorrServer/tree/master/web#readme
+
 ### Build
 
 #### Server
@@ -209,9 +230,9 @@ Enter current ip address and port of server _e.g. 127.0.0.1:8090_
 
 API documentation is hosted as Swagger format available at path `/swagger/index.html`.
 
-### API Authentication
+## Authentication
 
-The user data file should be located near to the settings. Basic auth, read more in wiki <https://en.wikipedia.org/wiki/Basic_access_authentication>.
+The users data file should be located near to the settings. Basic auth, read more in wiki <https://en.wikipedia.org/wiki/Basic_access_authentication>.
 
 `accs.db` in JSON format:
 
@@ -221,6 +242,7 @@ The user data file should be located near to the settings. Basic auth, read more
     "User2": "Pass2"
 }
 ```
+Note: You should enable authentication with -a (--httpauth) TorrServer startup option.
 
 ## Whitelist/Blacklist IP
 
@@ -262,7 +284,9 @@ local:127.0.0.1
 - [FaintGhost](https://github.com/FaintGhost) Zhang Yaowei for Simplified Chinese web translation
 - [Anton111111](https://github.com/Anton111111) Anton Potekhin for sleep on Windows fixes
 - [lieranderl](https://github.com/lieranderl) Evgeni for adding SSL support code
-- [cocool97](https://github.com/cocool97) for openapi API documentation
+- [cocool97](https://github.com/cocool97) for openapi API documentation and torrent categories
 - [shadeov](https://github.com/shadeov) for README improvements
 - [butaford](https://github.com/butaford) Pavel for make docker file and scripts
+- [filimonic](https://github.com/filimonic) Alexey D. Filimonov
+- [leporel](https://github.com/leporel) Viacheslav Evseev
 - and others

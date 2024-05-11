@@ -62,7 +62,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Test file size",
+                        "description": "Test file size (in MB)",
                         "name": "size",
                         "in": "path",
                         "required": true
@@ -98,7 +98,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ffp": {
+        "/ffp/{hash}/{id}": {
             "get": {
                 "description": "Gather informations using ffprobe.",
                 "produces": [
@@ -113,14 +113,14 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Torrent hash",
                         "name": "hash",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "File index in torrent",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -143,33 +143,7 @@ const docTemplate = `{
                 "summary": "Get HTML of magnet links",
                 "responses": {
                     "200": {
-                        "description": "Magnet links"
-                    }
-                }
-            }
-        },
-        "/msx": {
-            "get": {
-                "description": "Multi usage endpoint.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "MSX"
-                ],
-                "summary": "Multi usage endpoint",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Magnet/hash/link to torrent",
-                        "name": "link",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Data returned according to query"
+                        "description": "HTML with Magnet links"
                     }
                 }
             }
@@ -191,7 +165,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/msx/imdb/:id": {
+        "/msx/imdb/{id}": {
             "get": {
                 "description": "Get MSX IMDB informations.",
                 "produces": [
@@ -217,7 +191,33 @@ const docTemplate = `{
                 }
             }
         },
-        "/play": {
+        "/msx/{pth}": {
+            "get": {
+                "description": "Multi usage endpoint.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MSX"
+                ],
+                "summary": "Multi usage endpoint",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Route MSX pages",
+                        "name": "link",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data returned according to path"
+                    }
+                }
+            }
+        },
+        "/play/{hash}/{id}": {
             "get": {
                 "description": "Play given torrent referenced by hash.",
                 "produces": [
@@ -232,21 +232,15 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Torrent hash",
                         "name": "hash",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "File index in torrent",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Not authenticated",
-                        "name": "not_auth",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -358,7 +352,7 @@ const docTemplate = `{
                 "summary": "Get / Set server settings",
                 "parameters": [
                     {
-                        "description": "Settings request",
+                        "description": "Settings request. Available params for action: get, set, def",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -369,7 +363,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Depends on what action has been asked",
+                        "description": "Settings JSON or nothing. Depends on what action has been asked.",
                         "schema": {
                             "$ref": "#/definitions/settings.BTSets"
                         }
@@ -393,17 +387,17 @@ const docTemplate = `{
         },
         "/stat": {
             "get": {
-                "description": "Stat server.",
+                "description": "Show server and torrents statistics.",
                 "produces": [
                     "text/plain"
                 ],
                 "tags": [
                     "Pages"
                 ],
-                "summary": "Stat server",
+                "summary": "TorrServer Statistics",
                 "responses": {
                     "200": {
-                        "description": "Stats"
+                        "description": "TorrServer statistics"
                     }
                 }
             }
@@ -458,7 +452,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Get m3u from last play",
+                        "description": "Get M3U from last played file",
                         "name": "fromlast",
                         "in": "query"
                     },
@@ -472,22 +466,19 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Set title of torrent",
                         "name": "title",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "File index in torrent",
-                        "name": "poster",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "Set poster link of torrent",
-                        "name": "not_auth",
-                        "in": "query",
-                        "required": true
+                        "name": "poster",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Set category of torrent, used in web: movie, tv, music, other",
+                        "name": "category",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -509,7 +500,7 @@ const docTemplate = `{
                 "tags": [
                     "API"
                 ],
-                "summary": "Only one file support",
+                "summary": "Add .torrent file",
                 "parameters": [
                     {
                         "type": "file",
@@ -528,6 +519,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Torrent title",
                         "name": "title",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Torrent category",
+                        "name": "category",
                         "in": "formData"
                     },
                     {
@@ -555,7 +552,7 @@ const docTemplate = `{
         },
         "/torrents": {
             "post": {
-                "description": "Allow to add, get or set torrents to server. The action depends of what has been asked.",
+                "description": "Allow to list, add, remove, get, set, drop, wipe torrents on server. The action depends of what has been asked.",
                 "consumes": [
                     "application/json"
                 ],
@@ -568,7 +565,7 @@ const docTemplate = `{
                 "summary": "Handle torrents informations",
                 "parameters": [
                     {
-                        "description": "Torrent request",
+                        "description": "Torrent request. Available params for action: add, get, set, rem, list, drop, wipe. link required for add, hash required for get, set, rem, drop.",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -599,7 +596,7 @@ const docTemplate = `{
                 "summary": "Set / List / Remove viewed torrents",
                 "parameters": [
                     {
-                        "description": "Viewed torrent request",
+                        "description": "Viewed torrent request. Available params for action: set, rem, list",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -649,6 +646,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "action": {
+                    "type": "string"
+                },
+                "category": {
                     "type": "string"
                 },
                 "data": {
@@ -977,6 +977,9 @@ const docTemplate = `{
                 },
                 "bytes_written_data": {
                     "type": "integer"
+                },
+                "category": {
+                    "type": "string"
                 },
                 "chunks_read": {
                     "type": "integer"
