@@ -204,10 +204,10 @@ export default function RightSideComponent({
               ))}
           </PosterSuggestions>
 
-          {currentLang !== 'en' && (
+          {currentLang !== 'zh' && (
             <PosterLanguageSwitch
               onClick={() => {
-                const newLanguage = posterSearchLanguage === 'en' ? 'ru' : 'en'
+                const newLanguage = posterSearchLanguage === 'zh' ? 'en' : 'zh'
                 setPosterSearchLanguage(newLanguage)
                 posterSearch(isCustomTitleEnabled ? title : originalTorrentTitle ? parsedTitle : title, newLanguage, {
                   shouldRefreshMainPoster: true,
@@ -218,7 +218,7 @@ export default function RightSideComponent({
               variant='contained'
               size='small'
             >
-              {posterSearchLanguage === 'en' ? 'EN' : 'RU'}
+              {posterSearchLanguage === 'zh' ? 'ZH' : 'EN'}
             </PosterLanguageSwitch>
           )}
 
