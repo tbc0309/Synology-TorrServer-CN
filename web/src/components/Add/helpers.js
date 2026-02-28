@@ -31,7 +31,7 @@ const getTMDBSettings = async () => {
   }
 }
 
-export const getMoviePosters = async (movieName, language = 'en') => {
+export const getMoviePosters = async (movieName, language = 'zh') => {
   const settings = await getTMDBSettings()
 
   // If no API key is configured, return null
